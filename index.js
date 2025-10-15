@@ -26,3 +26,20 @@ db.connect((err)=> {
     console.log('Connected to Mysql successfully');
 
 })
+
+app.get('/biodata', (req, res) => {
+    
+    const sql = "SELECT * FROM biodata"; 
+    db.query(sql, (err, results) => {
+        if (err) {
+            
+            res.status(500).send({
+                message: "Error retrieving data from database",
+                error: err
+            });
+            return;
+        }
+        
+        res.json(results);
+    });
+});
