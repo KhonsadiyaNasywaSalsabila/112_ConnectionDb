@@ -43,3 +43,32 @@ app.get('/biodata', (req, res) => {
         res.json(results);
     });
 });
+
+app.post('/biodata', (req, res) => {
+   
+    const { nama, alamat, agama } = req.body;
+
+    
+    if (!nama || !alamat || !agama) {
+        return res.status(400).send({ message: "Nama, Alamat, and Agama are required" });
+    }
+
+    const sql = "INSERT INTO biodata (nama, alamat, agama) VALUES (?, ?, ?)";
+    const values = [nama, alamat, agama];
+
+    db.query(sql, values, (err, results) => {
+        if (err) {
+            
+            res.status(500).send({
+                message: "Error inserting data into database",
+                error: err
+            });
+            return;
+        }
+        
+        res.status(201).send({
+            message: "New student added successfully!",
+            data: { id: results.insertId, nama, alamat, agama}
+        });
+    });
+});
